@@ -7,6 +7,7 @@ namespace App\Learner\User\Presentation\API;
 use App\Learner\User\Application\CreateLearner\CreateLearnerCommand;
 use App\Learner\User\Application\CreateLearner\LearnerAlreadyExistException;
 use App\Shared\Application\CommandBus;
+use App\Shared\Domain\ValueObject\UuidValueObject;
 use App\Shared\Infrastructure\Eloquent\EloquentUser;
 use App\Shared\Infrastructure\Laravel\Controller;
 use Illuminate\Http\JsonResponse;
@@ -25,18 +26,18 @@ final class CreateLearnerController extends Controller
     {
         $data = $request->json()->all();
 
-        $id = Str::uuid()->toString();
+        $id = UuidValueObject::random();
         $email = $data['email'] ?? '';
         $plainPassword = $data['password'] ?? '';
         $firstname = $data['firstname'] ?? '';
         $lastname = $data['lastname'] ?? '';
 
         try {
-            $command = new CreateLearnerCommand($id, $email, $plainPassword, $firstname, $lastname);
+            $command = new CreateLearnerCommand((string) $id, $email, $plainPassword, $firstname, $lastname);
 
             $this->commandBus->handle($command);
-            echo($id);
-            return response()->json(EloquentUser::find($id), Response::HTTP_CREATED);
+
+            return response()->json(EloquentUser::find((string) $id), Response::HTTP_CREATED);
         } catch (\InvalidArgumentException $exception) {
             return response()->json(['error' => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (LearnerAlreadyExistException $exception) {
