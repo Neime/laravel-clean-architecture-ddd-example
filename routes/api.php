@@ -1,8 +1,9 @@
 <?php
 
-use App\Learner\User\Presentation\API\CreateLearnerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Learner\User\Presentation\API\CreateLearnerController;
+use App\Learner\Reservation\Presentation\API\GetLessonsAvailableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('create-learner', CreateLearnerController::class);
+Route::post('learner', CreateLearnerController::class);
+
+Route::get('lessons-available', GetLessonsAvailableController::class);

@@ -11,9 +11,8 @@ use App\Shared\Domain\ValueObject\UuidValueObject;
 use App\Shared\Infrastructure\Eloquent\EloquentUser;
 use App\Shared\Infrastructure\Laravel\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\Response;
 
 final class CreateLearnerController extends Controller
 {

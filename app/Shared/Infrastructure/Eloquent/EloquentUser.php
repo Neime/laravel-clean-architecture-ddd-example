@@ -4,12 +4,11 @@ namespace App\Shared\Infrastructure\Eloquent;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Learner\User\Domain\Learner;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class EloquentUser extends Authenticatable
 {

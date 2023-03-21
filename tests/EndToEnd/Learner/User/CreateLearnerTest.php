@@ -3,9 +3,9 @@
 namespace Tests\EndToEnd\Learner\User;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
+use Tests\TestCase;
 
 class CreateLearnerTest extends TestCase
 {
@@ -15,11 +15,11 @@ class CreateLearnerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->createLearnerUri = '/api/create-learner';
+        $this->createLearnerUri = '/api/learner';
     }
 
     /** @test **/
-    public function create_learner(): void
+    public function createLearner(): void
     {
         $parameters = [
             'firstname' => $this->faker->firstname,
@@ -45,7 +45,7 @@ class CreateLearnerTest extends TestCase
     }
 
     /** @test **/
-    public function cannot_create_learner_without_email(): void
+    public function cannotCreateLearnerWithoutEmail(): void
     {
         $parameters = [
             'firstname' => $this->faker->firstname,
@@ -61,7 +61,7 @@ class CreateLearnerTest extends TestCase
     }
 
     /** @test **/
-    public function cannot_create_learner_without_password(): void
+    public function cannotCreateLearnerWithoutPassword(): void
     {
         $parameters = [
             'firstname' => $this->faker->firstname,

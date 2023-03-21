@@ -15,6 +15,7 @@ final class Learner
         private readonly Lastname $lastname,
     ) {
     }
+
     public static function create(
         UuidValueObject $id,
         Credentials $credentials,

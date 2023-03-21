@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\ValueObject;
 
-use InvalidArgumentException;
 use Ramsey\Uuid\Uuid as RamseyUuid;
-use Stringable;
 
-class UuidValueObject implements Stringable
+class UuidValueObject implements \Stringable
 {
     public function __construct(public readonly string $value)
     {
@@ -33,7 +31,7 @@ class UuidValueObject implements Stringable
     private function ensureIsValidUuid(string $id): void
     {
         if (!RamseyUuid::isValid($id)) {
-            throw new InvalidArgumentException(sprintf('<%s> does not allow the value <%s>.', static::class, $id));
+            throw new \InvalidArgumentException(sprintf('<%s> does not allow the value <%s>.', static::class, $id));
         }
     }
 }
