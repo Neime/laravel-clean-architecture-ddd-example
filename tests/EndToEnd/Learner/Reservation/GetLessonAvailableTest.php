@@ -2,7 +2,6 @@
 
 namespace Tests\EndToEnd\Learner\Reservation;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;

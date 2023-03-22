@@ -24,7 +24,7 @@ class EloquentLearnerRepository implements CreateLearnerRepository
         $userEloquent->save();
     }
 
-    public function isEmailAlreadyExist(Email $email)
+    public function isEmailAlreadyExist(Email $email): bool
     {
         return EloquentUser::where('email', (string) $email)->exists();
     }

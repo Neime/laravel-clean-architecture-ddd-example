@@ -2,7 +2,6 @@
 
 namespace Tests\EndToEnd\Learner\User;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -19,7 +18,7 @@ class CreateLearnerTest extends TestCase
     }
 
     /** @test **/
-    public function createLearner(): void
+    public function canCreateLearner(): void
     {
         $parameters = [
             'firstname' => $this->faker->firstname,

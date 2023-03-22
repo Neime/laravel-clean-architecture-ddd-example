@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Learner\User\Domain;
+namespace App\Learner\Reservation\Domain;
 
 final class LessonAvailable
 {

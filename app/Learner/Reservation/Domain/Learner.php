@@ -6,7 +6,7 @@ namespace App\Learner\Reservation\Domain;
 
 use App\Shared\Domain\ValueObject\UuidValueObject;
 
-final class Lesson
+final class Learner
 {
     public function __construct(
         private readonly UuidValueObject $id,
