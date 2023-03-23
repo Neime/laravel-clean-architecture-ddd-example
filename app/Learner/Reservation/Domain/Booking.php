@@ -13,6 +13,7 @@ final class Booking
         private readonly Learner $learner,
         private readonly Lesson $lesson,
         private readonly AcceptationState $acceptationState,
+        private readonly PaymentState $paymentState,
     ) {
     }
 
@@ -27,6 +28,7 @@ final class Booking
             $learner,
             $lessonAvailable->lesson(),
             $acceptationState,
+            PaymentState::NEW,
         );
 
         return $book;

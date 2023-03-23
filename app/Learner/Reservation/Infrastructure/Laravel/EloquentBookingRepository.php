@@ -11,6 +11,7 @@ use App\Learner\Reservation\Domain\AcceptationState;
 use App\Learner\Reservation\Domain\Booking;
 use App\Learner\Reservation\Domain\Learner;
 use App\Learner\Reservation\Domain\Lesson;
+use App\Learner\Reservation\Domain\PaymentState;
 use App\Shared\Domain\ValueObject\UuidValueObject;
 use App\Shared\Infrastructure\Eloquent\EloquentBook;
 
@@ -42,6 +43,7 @@ class EloquentBookingRepository implements BookLessonRepository, GetBookingsRepo
                 new Learner(new UuidValueObject($booking['learner_id'] ?? '')),
                 new Lesson(new UuidValueObject($booking['lesson_id'] ?? '')),
                 AcceptationState::tryFrom($booking['status'] ?? ''),
+                PaymentState::tryFrom($booking['payment_status'] ?? ''),
             ),
             EloquentBook::where('learner_id', $learnerId)->where('status', '!=', AcceptationState::REFUSED)->get()->toArray()
         );

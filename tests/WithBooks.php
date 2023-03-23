@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Learner\Reservation\Domain\AcceptationState;
+use App\Learner\Reservation\Domain\PaymentState;
 use App\Shared\Infrastructure\Eloquent\EloquentBook;
 use App\Shared\Infrastructure\Eloquent\EloquentLesson;
 use App\Shared\Infrastructure\Eloquent\EloquentUser;
@@ -19,6 +20,7 @@ trait WithBooks
         $book->learner_id = $learner->id;
         $book->lesson_id = $lesson ? $lesson->id : $this->newLesson()->id;
         $book->status = $state;
+        $book->payment_status = PaymentState::NEW;
         $book->save();
 
         return $book;

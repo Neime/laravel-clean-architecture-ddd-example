@@ -10,4 +10,5 @@ class Controller extends BaseController
 {
     use AuthorizesRequests;
     use ValidatesRequests;
+    public const ERROR = 'error';
 }

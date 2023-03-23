@@ -36,9 +36,9 @@ final class BookLessonController extends Controller
 
             return response()->json(EloquentBook::find((string) $id), Response::HTTP_CREATED);
         } catch (\InvalidArgumentException $exception) {
-            return response()->json(['error' => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json([self::ERROR => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (LessonIsNotAvailableException $exception) {
-            return response()->json(['error' => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json([self::ERROR => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 }
