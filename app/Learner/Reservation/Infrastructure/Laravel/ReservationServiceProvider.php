@@ -14,7 +14,7 @@ class ReservationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(GetLessonsAvailableRepository::class, EloquentLessonRepository::class);
-        $this->app->bind(BookLessonRepository::class, EloquentBookRepository::class);
-        $this->app->bind(GetBookingsRepository::class, EloquentBookRepository::class);
+        $this->app->bind(BookLessonRepository::class, EloquentBookingRepository::class);
+        $this->app->bind(GetBookingsRepository::class, EloquentBookingRepository::class);
     }
 }

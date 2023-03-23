@@ -6,5 +6,5 @@ namespace App\Learner\Reservation\Application\GetBookings;
 
 interface GetBookingsRepository
 {
-    public function getBookings(string $learnerId): array;
+    public function getBookings(string $learnerId): BookingsResponse;
 }
