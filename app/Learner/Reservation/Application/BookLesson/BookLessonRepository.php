@@ -11,5 +11,5 @@ interface BookLessonRepository
 {
     public function store(Book $book): void;
 
-    public function isLessonAlreadyPendingOrAccepted(Lesson $lesson): bool;
+    public function isLessonAvailable(Lesson $lesson): bool;
 }

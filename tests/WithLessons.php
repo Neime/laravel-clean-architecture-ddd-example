@@ -12,40 +12,18 @@ trait WithLessons
     protected function newLesson(): EloquentLesson
     {
         $lessonAvailable = new EloquentLesson();
-        $lessonAvailable->available = false;
         $lessonAvailable->save();
 
         return $lessonAvailable;
-    }
-
-    protected function newLessonAvailable(): EloquentLesson
-    {
-        $lessonAvailable = new EloquentLesson();
-        $lessonAvailable->available = true;
-        $lessonAvailable->save();
-
-        return $lessonAvailable;
-    }
-
-    protected function createRandomLessonsAvailable(int $lessonsCount): array
-    {
-        $ids = [];
-        foreach (range(1, $lessonsCount) as $_) {
-            $lesson = $this->newLessonAvailable();
-            $ids[] = $lesson->id;
-        }
-
-        return $ids;
     }
 
     protected function createRandomLessons(int $lessonsCount): array
     {
-        $ids = [];
+        $lessons = [];
         foreach (range(1, $lessonsCount) as $_) {
-            $lesson = $this->newLesson();
-            $ids[] = $lesson->id;
+            $lessons[] = $this->newLesson();
         }
 
-        return $ids;
+        return $lessons;
     }
 }

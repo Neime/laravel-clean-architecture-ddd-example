@@ -15,11 +15,6 @@ final class GetLessonsAvailableHandler implements QueryHandler
 
     public function __invoke(GetLessonsAvailableQuery $query): LessonsAvailableResponse
     {
-        $lessonsAvailable = array_map(
-            fn (array $lessonAvailable) => new LessonAvailableResponse($lessonAvailable['id']),
-            $this->getLessonsAvailableRepository->getLessonsAvailable()
-        );
-
-        return new LessonsAvailableResponse(...$lessonsAvailable);
+        return $this->getLessonsAvailableRepository->getLessonsAvailable();
     }
 }

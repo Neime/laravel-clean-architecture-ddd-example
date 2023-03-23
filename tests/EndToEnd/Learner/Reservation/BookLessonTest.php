@@ -25,12 +25,12 @@ class BookLessonTest extends TestCase
     /** @test **/
     public function canBookLesson(): void
     {
-        $lessonAvailable = $this->newLessonAvailable();
+        $lesson = $this->newLesson();
         $learner = $this->newLearner();
 
         $parameters = [
             'learner_id' => $learner->id,
-            'lesson_id' => $lessonAvailable->id,
+            'lesson_id' => $lesson->id,
         ];
 
         $response = $this->postJson($this->bookLessonUri, $parameters);
@@ -41,8 +41,8 @@ class BookLessonTest extends TestCase
         $response = $this->postJson($this->bookLessonUri, $parameters);
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJson(['error' => 'This lesson is already pending or accepted']);
+            ->assertJson(['error' => 'This lesson is not available']);
 
-        $this->assertDatabaseHas('book', ['learner_id' => $learner->id, 'lesson_id' => $lessonAvailable->id, 'status' => 'pending']);
+        $this->assertDatabaseHas('book', ['learner_id' => $learner->id, 'lesson_id' => $lesson->id, 'status' => 'pending']);
     }
 }

@@ -24,9 +24,9 @@ class EloquentBookRepository implements BookLessonRepository, GetBookingsReposit
         $bookEloquent->save();
     }
 
-    public function isLessonAlreadyPendingOrAccepted(Lesson $lesson): bool
+    public function isLessonAvailable(Lesson $lesson): bool
     {
-        return EloquentBook::where('lesson_id', (string) $lesson->id())
+        return !EloquentBook::where('lesson_id', (string) $lesson->id())
             ->where('status', '!=', AcceptationState::REFUSED)
             ->exists();
     }

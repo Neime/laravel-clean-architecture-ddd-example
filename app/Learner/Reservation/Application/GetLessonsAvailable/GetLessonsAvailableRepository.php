@@ -6,5 +6,5 @@ namespace App\Learner\Reservation\Application\GetLessonsAvailable;
 
 interface GetLessonsAvailableRepository
 {
-    public function getLessonsAvailable(): array;
+    public function getLessonsAvailable(): LessonsAvailableResponse;
 }

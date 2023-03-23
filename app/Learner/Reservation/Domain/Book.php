@@ -19,13 +19,13 @@ final class Book
     public static function create(
         UuidValueObject $id,
         Learner $learner,
-        Lesson $lesson,
+        LessonAvailable $lessonAvailable,
         AcceptationState $acceptationState,
     ): self {
         $book = new self(
             $id,
             $learner,
-            $lesson,
+            $lessonAvailable->lesson(),
             $acceptationState,
         );
 

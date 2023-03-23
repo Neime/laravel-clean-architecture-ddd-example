@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Learner\Reservation\Presentation\API;
 
 use App\Learner\Reservation\Application\BookLesson\BookLessonCommand;
-use App\Learner\Reservation\Application\BookLesson\LessonAlreadyPendingOrAcceptedException;
+use App\Learner\Reservation\Domain\LessonIsNotAvailableException;
 use App\Shared\Application\CommandBus;
 use App\Shared\Domain\ValueObject\UuidValueObject;
 use App\Shared\Infrastructure\Eloquent\EloquentBook;
@@ -37,7 +37,7 @@ final class BookLessonController extends Controller
             return response()->json(EloquentBook::find((string) $id), Response::HTTP_CREATED);
         } catch (\InvalidArgumentException $exception) {
             return response()->json(['error' => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (LessonAlreadyPendingOrAcceptedException $exception) {
+        } catch (LessonIsNotAvailableException $exception) {
             return response()->json(['error' => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
