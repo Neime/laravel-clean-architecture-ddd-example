@@ -1,66 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><strong>Clean Architecture, DDD et CQRS example with Laravel</strong></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## About
 
-## About Laravel
+The application will provide a Rest JSON API allowing a user to book lessons for an instructor on defined schedules, these will be created by the instructor.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A lesson is available if it does not have a confirmed or pending reservation.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+A lesson will have a price.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The validation of the reservation by the instructor of a lesson will result in the debit of the user's wallet.
 
-## Learning Laravel
+The user will be able to fill his wallet in euros only.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Event Storming / Sequence Diagram
+    
+![screenshot-excalidraw com-2023 03 23-15_43_02](https://user-images.githubusercontent.com/5405182/227239475-65db8fac-184c-4ca3-99a0-4b2db4828bbb.png)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+(It would have been better to make a sequence diagram by use case and to do a real event storming)
+    
+## Use Cases
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Use Case 1
 
-## Laravel Sponsors
+Application can create a user to be a teacher
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Use Case 2
 
-### Premium Partners
+Application can create a user to be a learner
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Use Case 3
 
-## Contributing
+Teacher create a lesson with a start date and hour and price
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Use Case 4
 
-## Code of Conduct
+Learner add euros on his wallet
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Use Case 5
 
-## Security Vulnerabilities
+Learner see lessons available 
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Use Case 6
 
-## License
+Learner book a lesson available if wallet is sufficient
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Use Case 7
+
+Teacher validate a booking 
+
+### Use Case 8
+
+Transfert money to debit wallet of learner and credit wallet of techer and close it lesson
+
+## Bounded Context & Domain
+
+Learner (Bounded Context) : 
+
+User (Domain)
+- Use case 2
+
+Booking (Domain)
+- Use Case 5
+- Use Case 6
+
+Teacher (Bounded Context) : 
+
+User (Domain)
+- Use case 1
+
+Lesson (Domain)
+- Use Case 3
+- Use Case 7
+
+Bank (Bounded Context) :
+
+Wallet (Domain)
+- Use Case 4
+- Use Case 8
+
+## CQRS  (Command and Query)
+
+### Learner Bounded Context
+
+#### Command
+CreateLearner : create a learner
+BookLesson : book a lesson by a learner, booking is pending and payment status is new also, and send event
+
+#### Query
+GetLessonsAvailable : get all lessons available
+GetBookings : get all booking create by learner
+
+#### Event
+LessonBooked : event to indicate a lesson has been booked
+
+#### Consumer
+-
+
+### Teacher Bounded Conext
+
+#### Command
+CreateTeacher : create a teacher
+CreateLesson : create a lesson by a teacher
+ValidateBooking : validate a booking
+RefuseBooking : refuse a booking
+
+#### Query
+GetBookingsPending : get all booking of its lessons pending validation and payment state pending
+
+#### Event
+BookingValidated : event to indicate a booking has been validated
+BookingRefused : event to indicate a booking has been refused
+
+#### Consumer
+-
+
+### Bank Bounded Context
+
+#### Command
+AddMoneyToWallet : add money to a wallet of an user
+TransfertMoney : transfert money between wallet
+AuthorizeTransaction : check if has enough money for a user to do a transaction, state new to pending
+CreateTransaction : create transaction for a wallet with new state and price
+
+#### Query
+-
+
+#### Event
+TransactionAuthorized : event to indicate that a transaction is authorized
+
+#### Consumer
+LessonBookedConsumer : listen if a booking has been asked, create Transaction and authorize transaction 
+BookingValidatedConsumer : listen if a booking has been validated and transfert money between learner wallet and teacher wallet
+BookingRefusedConsumer : listen if a booking has been refused and cancel transaction
