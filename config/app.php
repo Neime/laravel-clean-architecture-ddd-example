@@ -196,6 +196,7 @@ return [
         App\Shared\Infrastructure\Laravel\Providers\RouteServiceProvider::class,
         App\Learner\User\Infrastructure\Laravel\UserServiceProvider::class,
         App\Learner\Reservation\Infrastructure\Laravel\ReservationServiceProvider::class,
+        App\Teacher\User\Infrastructure\Laravel\UserServiceProvider::class,
     ],
 
     /*

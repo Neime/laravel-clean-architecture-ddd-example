@@ -12,6 +12,7 @@ trait WithLearner
     protected function newLearner(): EloquentUser
     {
         $learner = new EloquentUser();
+        $learner->type = EloquentUser::LEARNER_TYPE;
         $learner->email = $this->faker->safeEmail;
         $learner->password = $this->faker->password(8);
         $learner->save();

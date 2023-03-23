@@ -16,6 +16,7 @@ class EloquentLearnerRepository implements CreateLearnerRepository
     {
         $userEloquent = new EloquentUser();
         $userEloquent->id = (string) $learner->id();
+        $userEloquent->type = EloquentUser::LEARNER_TYPE;
         $userEloquent->email = $learner->email();
         $userEloquent->firstname = $learner->firstname();
         $userEloquent->lastname = $learner->lastname();

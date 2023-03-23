@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Learner\User\Presentation\API\CreateLearnerController;
+use App\Teacher\User\Presentation\API\CreateTeacherController;
 use App\Learner\Reservation\Presentation\API\BookLessonController;
 use App\Learner\Reservation\Presentation\API\GetBookingsController;
 use App\Learner\Reservation\Presentation\API\GetLessonsAvailableController;
@@ -19,6 +20,7 @@ use App\Learner\Reservation\Presentation\API\GetLessonsAvailableController;
 */
 
 Route::post('learner', CreateLearnerController::class);
+Route::post('teacher', CreateTeacherController::class);
 
 Route::get('lessons-available', GetLessonsAvailableController::class);
 

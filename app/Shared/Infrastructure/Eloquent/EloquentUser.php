@@ -16,6 +16,8 @@ class EloquentUser extends Authenticatable
     use HasFactory;
     use Notifiable;
     use HasUuids;
+    public const LEARNER_TYPE = 'learner';
+    public const TEACHER_TYPE = 'teacher';
 
     protected $table = 'users';
 
