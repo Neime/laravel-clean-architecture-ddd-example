@@ -12,7 +12,7 @@ final class Booking
         private readonly UuidValueObject $id,
         private readonly Learner $learner,
         private readonly Lesson $lesson,
-        private readonly AcceptationState $acceptationState,
+        private readonly ValidationState $validationState,
         private readonly PaymentState $paymentState,
     ) {
     }
@@ -21,13 +21,13 @@ final class Booking
         UuidValueObject $id,
         Learner $learner,
         LessonAvailable $lessonAvailable,
-        AcceptationState $acceptationState,
+        ValidationState $validationState,
     ): self {
         $book = new self(
             $id,
             $learner,
             $lessonAvailable->lesson(),
-            $acceptationState,
+            $validationState,
             PaymentState::NEW,
         );
 
@@ -49,8 +49,8 @@ final class Booking
         return $this->lesson;
     }
 
-    public function acceptationState(): AcceptationState
+    public function validationState(): validationState
     {
-        return $this->acceptationState;
+        return $this->validationState;
     }
 }

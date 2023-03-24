@@ -2,17 +2,17 @@
 
 namespace Tests\EndToEnd\Learner\Reservation;
 
-use App\Learner\Reservation\Domain\AcceptationState;
+use App\Learner\Reservation\Domain\ValidationState;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
-use Tests\WithBooks;
+use Tests\WithBookings;
 use Tests\WithLearner;
 
 class GetBookingsTest extends TestCase
 {
     use WithFaker;
-    use WithBooks;
+    use WithBookings;
     use WithLearner;
 
     private string $getBookingsUri;
@@ -38,14 +38,14 @@ class GetBookingsTest extends TestCase
         $numberRefusedBooksLearner1 = $this->faker->numberBetween(1, 5);
         $numberRefusedBooksLearner2 = $this->faker->numberBetween(1, 5);
 
-        $this->createRandomBooks($numberPendingBooksLearner1, $learner1, AcceptationState::PENDING);
-        $this->createRandomBooks($numberPendingBooksLearner2, $learner2, AcceptationState::PENDING);
+        $this->createRandomBooks($numberPendingBooksLearner1, $learner1, ValidationState::PENDING);
+        $this->createRandomBooks($numberPendingBooksLearner2, $learner2, ValidationState::PENDING);
 
-        $this->createRandomBooks($numberAcceptedBooksLearner1, $learner1, AcceptationState::ACCEPTED);
-        $this->createRandomBooks($numberAcceptedBooksLearner2, $learner2, AcceptationState::ACCEPTED);
+        $this->createRandomBooks($numberAcceptedBooksLearner1, $learner1, ValidationState::ACCEPTED);
+        $this->createRandomBooks($numberAcceptedBooksLearner2, $learner2, ValidationState::ACCEPTED);
 
-        $this->createRandomBooks($numberRefusedBooksLearner1, $learner1, AcceptationState::REFUSED);
-        $this->createRandomBooks($numberRefusedBooksLearner2, $learner2, AcceptationState::REFUSED);
+        $this->createRandomBooks($numberRefusedBooksLearner1, $learner1, ValidationState::REFUSED);
+        $this->createRandomBooks($numberRefusedBooksLearner2, $learner2, ValidationState::REFUSED);
 
         $response = $this->getJson(sprintf($this->getBookingsUri, $learner1->id));
 

@@ -2,11 +2,11 @@
 
 namespace Tests\EndToEnd\Learner\Reservation;
 
-use App\Learner\Reservation\Domain\AcceptationState;
+use App\Learner\Reservation\Domain\ValidationState;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
-use Tests\WithBooks;
+use Tests\WithBookings;
 use Tests\WithLearner;
 use Tests\WithLessons;
 
@@ -14,7 +14,7 @@ class GetLessonAvailableTest extends TestCase
 {
     use WithFaker;
     use WithLessons;
-    use WithBooks;
+    use WithBookings;
     use WithLearner;
 
     private string $getLessonAvailableUri;
@@ -35,7 +35,7 @@ class GetLessonAvailableTest extends TestCase
         $lessonsNotAvailable = $this->createRandomLessons(5);
 
         foreach ($lessonsNotAvailable as $lessonNotAvailable) {
-            $this->newBook($this->newLearner(), AcceptationState::PENDING, $lessonNotAvailable);
+            $this->newBook($this->newLearner(), ValidationState::PENDING, $lessonNotAvailable);
         }
 
         $response = $this->getJson($this->getLessonAvailableUri);

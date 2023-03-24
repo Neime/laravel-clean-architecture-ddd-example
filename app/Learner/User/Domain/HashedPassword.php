@@ -28,7 +28,7 @@ final class HashedPassword implements \Stringable
 
     public function match(string $plainPassword): bool
     {
-        return \password_verify($plainPassword, $this->hashedPassword);
+        return password_verify($plainPassword, $this->hashedPassword);
     }
 
     private static function hash(string $plainPassword): string

@@ -2,19 +2,19 @@
 
 namespace Tests;
 
-use App\Learner\Reservation\Domain\AcceptationState;
 use App\Learner\Reservation\Domain\PaymentState;
+use App\Learner\Reservation\Domain\ValidationState;
 use App\Shared\Infrastructure\Eloquent\EloquentBook;
 use App\Shared\Infrastructure\Eloquent\EloquentLesson;
 use App\Shared\Infrastructure\Eloquent\EloquentUser;
 use Illuminate\Foundation\Testing\WithFaker;
 
-trait WithBooks
+trait WithBookings
 {
     use WithFaker;
     use WithLessons;
 
-    protected function newBook(EloquentUser $learner, AcceptationState $state, ?EloquentLesson $lesson = null): EloquentBook
+    protected function newBook(EloquentUser $learner, ValidationState $state, ?EloquentLesson $lesson = null): EloquentBook
     {
         $book = new EloquentBook();
         $book->learner_id = $learner->id;
@@ -26,7 +26,7 @@ trait WithBooks
         return $book;
     }
 
-    protected function createRandomBooks(int $count, EloquentUser $learner, AcceptationState $state, ?EloquentLesson $lesson = null): array
+    protected function createRandomBooks(int $count, EloquentUser $learner, ValidationState $state, ?EloquentLesson $lesson = null): array
     {
         $ids = [];
         foreach (range(1, $count) as $_) {

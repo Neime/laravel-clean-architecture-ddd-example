@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Learner\Reservation\Domain;
+namespace App\Teacher\Lesson\Domain;
 
-enum AcceptationState: string
+enum ValidationState: string
 {
     case PENDING = 'pending';
     case ACCEPTED = 'accepted';
