@@ -29,4 +29,4 @@ Route::post('book', BookLessonController::class);
 
 Route::get('bookings/{learner_id}', GetBookingsController::class);
 
-Route::post('booking/{id}/validate', ValidateBookingController::class);
+Route::post('booking/{id}/validation-state', ValidateBookingController::class);

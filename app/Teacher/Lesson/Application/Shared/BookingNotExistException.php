@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Teacher\Lesson\Application\ValidateBooking;
+namespace App\Teacher\Lesson\Application\Shared;
 
 final class BookingNotExistException extends \Exception
 {

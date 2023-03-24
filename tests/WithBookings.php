@@ -7,6 +7,7 @@ use App\Learner\Reservation\Domain\ValidationState;
 use App\Shared\Infrastructure\Eloquent\EloquentBook;
 use App\Shared\Infrastructure\Eloquent\EloquentLesson;
 use App\Shared\Infrastructure\Eloquent\EloquentUser;
+use App\Teacher\Lesson\Domain\ValidationState as TeacherValidationState;
 use Illuminate\Foundation\Testing\WithFaker;
 
 trait WithBookings
@@ -14,7 +15,7 @@ trait WithBookings
     use WithFaker;
     use WithLessons;
 
-    protected function newBook(EloquentUser $learner, ValidationState $state, ?EloquentLesson $lesson = null): EloquentBook
+    protected function newBook(EloquentUser $learner, ValidationState|TeacherValidationState $state, ?EloquentLesson $lesson = null): EloquentBook
     {
         $book = new EloquentBook();
         $book->learner_id = $learner->id;
@@ -26,7 +27,7 @@ trait WithBookings
         return $book;
     }
 
-    protected function createRandomBooks(int $count, EloquentUser $learner, ValidationState $state, ?EloquentLesson $lesson = null): array
+    protected function createRandomBooks(int $count, EloquentUser $learner, ValidationState|TeacherValidationState $state, ?EloquentLesson $lesson = null): array
     {
         $ids = [];
         foreach (range(1, $count) as $_) {
