@@ -21,4 +21,15 @@ final class LessonAvailable
     {
         return $this->lesson;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => (string) $this->lesson->id(),
+            'is_available' => $this->isAvailable->value,
+            'teacher' => $this->lesson->teacherFullName(),
+            'price' => $this->lesson()->price(),
+            'date' => $this->lesson()->date(),
+        ];
+    }
 }

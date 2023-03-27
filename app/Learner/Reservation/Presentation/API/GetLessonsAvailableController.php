@@ -20,6 +20,6 @@ final class GetLessonsAvailableController extends Controller
     {
         $lessonsAvailableResponse = $this->queryBus->handle(new GetLessonsAvailableQuery());
 
-        return response()->json($lessonsAvailableResponse->lessonsAvailable);
+        return response()->json($lessonsAvailableResponse->toArray());
     }
 }

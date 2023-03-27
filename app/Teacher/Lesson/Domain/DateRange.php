@@ -11,7 +11,7 @@ final class DateRange
 
     public function __construct(private readonly \DateTimeImmutable $startDate, private readonly \DateTimeImmutable $endDate)
     {
-        if ($startDate > $endDate) {
+        if ($startDate >= $endDate) {
             throw new \InvalidArgumentException('End date must higher than start date');
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Learner\Reservation\Domain;
 
 final class LessonIsNotAvailableException extends \Exception

@@ -2,6 +2,7 @@
 
 namespace Tests\EndToEnd\Learner\User;
 
+use App\Shared\Domain\ValueObject\UuidValueObject;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -44,5 +45,21 @@ class BookLessonTest extends TestCase
             ->assertJson(['error' => 'This lesson is not available']);
 
         $this->assertDatabaseHas('book', ['learner_id' => $learner->id, 'lesson_id' => $lesson->id, 'status' => 'pending']);
+    }
+
+    /** @test **/
+    public function cannotBookLessonNotExist(): void
+    {
+        $learner = $this->newLearner();
+
+        $parameters = [
+            'learner_id' => $learner->id,
+            'lesson_id' => (string) UuidValueObject::random(),
+        ];
+
+        $response = $this->postJson($this->bookLessonUri, $parameters);
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson(['error' => 'This lesson does not exist']);
     }
 }

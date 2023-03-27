@@ -15,4 +15,12 @@ final class LessonsAvailableResponse implements Response
     {
         $this->lessonsAvailable = $lessonsAvailable;
     }
+
+    public function toArray(): array
+    {
+        return array_map(
+            fn (LessonAvailable $lessonAvailable) => $lessonAvailable->toArray(),
+            $this->lessonsAvailable
+        );
+    }
 }

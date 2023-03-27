@@ -6,4 +6,5 @@ namespace App\Shared\Application;
 
 interface Response
 {
+    public function toArray(): array;
 }

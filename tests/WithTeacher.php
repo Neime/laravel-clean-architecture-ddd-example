@@ -14,6 +14,8 @@ trait WithTeacher
         $teacher = new EloquentUser();
         $teacher->type = EloquentUser::TEACHER_TYPE;
         $teacher->company_name = $this->faker->company;
+        $teacher->firstname = $this->faker->firstName;
+        $teacher->lastname = $this->faker->lastName;
         $teacher->email = $this->faker->safeEmail;
         $teacher->password = $this->faker->password(8);
         $teacher->save();

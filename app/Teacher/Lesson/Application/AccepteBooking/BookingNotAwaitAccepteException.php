@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Teacher\Lesson\Application\AccepteBooking;
 
 final class BookingNotAwaitAccepteException extends \Exception

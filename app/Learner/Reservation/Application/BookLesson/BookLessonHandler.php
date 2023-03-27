@@ -7,7 +7,6 @@ namespace App\Learner\Reservation\Application\BookLesson;
 use App\Learner\Reservation\Domain\Booking;
 use App\Learner\Reservation\Domain\IsAvailable;
 use App\Learner\Reservation\Domain\Learner;
-use App\Learner\Reservation\Domain\Lesson;
 use App\Learner\Reservation\Domain\LessonAvailable;
 use App\Learner\Reservation\Domain\ValidationState;
 use App\Shared\Application\CommandHandler;
@@ -26,7 +25,11 @@ final class BookLessonHandler implements CommandHandler
         $lessonId = new UuidValueObject($command->lessonId);
         $learnerId = new UuidValueObject($command->learnerId);
 
-        $lesson = new Lesson($lessonId);
+        $lesson = $this->bookLessonRepository->findLesson($lessonId);
+        if (null === $lesson) {
+            throw new LessonNotExistException();
+        }
+
         $learner = new Learner($learnerId);
 
         $lessonAvailable = new LessonAvailable($lesson, new IsAvailable($this->bookLessonRepository->isLessonAvailable($lesson)));

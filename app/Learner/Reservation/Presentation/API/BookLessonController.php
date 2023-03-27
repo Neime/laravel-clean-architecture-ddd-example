@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Learner\Reservation\Presentation\API;
 
 use App\Learner\Reservation\Application\BookLesson\BookLessonCommand;
+use App\Learner\Reservation\Application\BookLesson\LessonNotExistException;
 use App\Learner\Reservation\Domain\LessonIsNotAvailableException;
 use App\Shared\Application\CommandBus;
 use App\Shared\Domain\ValueObject\UuidValueObject;
@@ -38,6 +39,8 @@ final class BookLessonController extends Controller
         } catch (\InvalidArgumentException $exception) {
             return response()->json([self::ERROR => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (LessonIsNotAvailableException $exception) {
+            return response()->json([self::ERROR => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (LessonNotExistException $exception) {
             return response()->json([self::ERROR => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }

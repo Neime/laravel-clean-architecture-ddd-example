@@ -11,7 +11,7 @@ final class Booking
     public function __construct(
         private readonly UuidValueObject $id,
         private readonly Learner $learner,
-        private readonly Lesson $lesson,
+        private readonly LessonId $lessonId,
         private readonly ValidationState $validationState,
         private readonly PaymentState $paymentState,
     ) {
@@ -26,7 +26,7 @@ final class Booking
         $book = new self(
             $id,
             $learner,
-            $lessonAvailable->lesson(),
+            $lessonAvailable->lesson()->id(),
             $validationState,
             PaymentState::NEW,
         );
@@ -44,13 +44,23 @@ final class Booking
         return $this->learner;
     }
 
-    public function lesson(): Lesson
+    public function lessonId(): LessonId
     {
-        return $this->lesson;
+        return $this->lessonId;
     }
 
     public function validationState(): validationState
     {
         return $this->validationState;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => (string) $this->id(),
+            'learner_id' => $this->learner()->id(),
+            'lesson_id' => $this->lessonId(),
+            'validation_state' => $this->validationState()->value,
+        ];
     }
 }

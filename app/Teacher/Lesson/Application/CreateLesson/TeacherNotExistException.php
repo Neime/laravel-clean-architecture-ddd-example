@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Teacher\Lesson\Application\CreateLesson;
 
 final class TeacherNotExistException extends \Exception

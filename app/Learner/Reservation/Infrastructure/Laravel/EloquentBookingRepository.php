@@ -10,10 +10,14 @@ use App\Learner\Reservation\Application\GetBookings\GetBookingsRepository;
 use App\Learner\Reservation\Domain\Booking;
 use App\Learner\Reservation\Domain\Learner;
 use App\Learner\Reservation\Domain\Lesson;
+use App\Learner\Reservation\Domain\LessonId;
 use App\Learner\Reservation\Domain\PaymentState;
+use App\Learner\Reservation\Domain\Teacher;
 use App\Learner\Reservation\Domain\ValidationState;
 use App\Shared\Domain\ValueObject\UuidValueObject;
 use App\Shared\Infrastructure\Eloquent\EloquentBook;
+use App\Shared\Infrastructure\Eloquent\EloquentLesson;
+use App\Shared\Infrastructure\Eloquent\EloquentUser;
 
 class EloquentBookingRepository implements BookLessonRepository, GetBookingsRepository
 {
@@ -22,7 +26,7 @@ class EloquentBookingRepository implements BookLessonRepository, GetBookingsRepo
         $bookEloquent = new EloquentBook();
         $bookEloquent->id = (string) $book->id();
         $bookEloquent->learner_id = $book->learner()->id();
-        $bookEloquent->lesson_id = $book->lesson()->id();
+        $bookEloquent->lesson_id = $book->lessonId();
         $bookEloquent->status = $book->validationState();
 
         $bookEloquent->save();
@@ -41,7 +45,7 @@ class EloquentBookingRepository implements BookLessonRepository, GetBookingsRepo
             fn (array $booking) => new Booking(
                 new UuidValueObject($booking['id'] ?? ''),
                 new Learner(new UuidValueObject($booking['learner_id'] ?? '')),
-                new Lesson(new UuidValueObject($booking['lesson_id'] ?? '')),
+                new LessonId($booking['lesson_id'] ?? ''),
                 ValidationState::tryFrom($booking['status'] ?? ''),
                 PaymentState::tryFrom($booking['payment_status'] ?? ''),
             ),
@@ -49,5 +53,29 @@ class EloquentBookingRepository implements BookLessonRepository, GetBookingsRepo
         );
 
         return new BookingsResponse(...$bookings);
+    }
+
+    public function findLesson(UuidValueObject $lessonId): ?Lesson
+    {
+        $lesson = EloquentLesson::find((string) $lessonId);
+
+        if (null === $lesson) {
+            return null;
+        }
+
+        $teacher = EloquentUser::find($lesson->teacher_id);
+
+        return new Lesson(
+            new LessonId($lesson->id),
+            new Teacher(
+                new UuidValueObject($teacher->id),
+                $teacher->firstname,
+                $teacher->lastname,
+            ),
+            $lesson->amount,
+            $lesson->currency,
+            new \DateTimeImmutable($lesson->start_date),
+            new \DateTimeImmutable($lesson->end_date),
+        );
     }
 }

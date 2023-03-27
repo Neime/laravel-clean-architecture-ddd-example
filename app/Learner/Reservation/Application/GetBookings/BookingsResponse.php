@@ -15,4 +15,12 @@ final class BookingsResponse implements Response
     {
         $this->bookings = $bookings;
     }
+
+    public function toArray(): array
+    {
+        return array_map(
+            fn (Booking $booking) => $booking->toArray(),
+            $this->bookings
+        );
+    }
 }
