@@ -13,7 +13,7 @@ trait WithTeacher
     {
         $teacher = new EloquentUser();
         $teacher->type = EloquentUser::TEACHER_TYPE;
-        $teacher->companyName = $this->faker->company;
+        $teacher->company_name = $this->faker->company;
         $teacher->email = $this->faker->safeEmail;
         $teacher->password = $this->faker->password(8);
         $teacher->save();

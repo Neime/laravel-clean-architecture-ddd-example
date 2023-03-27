@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Learner\User\Presentation\API\CreateLearnerController;
 use App\Teacher\User\Presentation\API\CreateTeacherController;
+use App\Teacher\Lesson\Presentation\API\CreateLessonController;
 use App\Learner\Reservation\Presentation\API\BookLessonController;
 use App\Teacher\Lesson\Presentation\API\ValidateBookingController;
 use App\Learner\Reservation\Presentation\API\GetBookingsController;
@@ -24,6 +25,7 @@ Route::post('learner', CreateLearnerController::class);
 Route::post('teacher', CreateTeacherController::class);
 
 Route::get('lessons-available', GetLessonsAvailableController::class);
+Route::post('lesson', CreateLessonController::class);
 
 Route::post('book', BookLessonController::class);
 
