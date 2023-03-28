@@ -6,24 +6,10 @@ namespace App\Bank\Wallet\Domain;
 
 final class Price
 {
-    public const EUR = 'EUR';
-
     public function __construct(
         private readonly int $amount,
-        private readonly string $currency,
+        private readonly Currency $currency,
     ) {
-        if ($amount < 0) {
-            throw new \InvalidArgumentException(sprintf('%s must be a positive value', $amount));
-        }
-
-        if (!\in_array($currency, $this->getAvailableCurrencies())) {
-            throw new \InvalidArgumentException(sprintf('%s must be a valid currency', $currency));
-        }
-    }
-
-    public function getAvailableCurrencies(): array
-    {
-        return [self::EUR];
     }
 
     public function amount(): int
@@ -31,7 +17,7 @@ final class Price
         return $this->amount;
     }
 
-    public function currency(): string
+    public function currency(): Currency
     {
         return $this->currency;
     }

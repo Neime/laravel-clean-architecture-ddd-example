@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Bank\Wallet\Presentation\API;
 
 use App\Bank\Wallet\Application\CreateTransaction\CreateTransactionCommand;
+use App\Bank\Wallet\Application\CreateTransaction\CurrencyMismatchException;
 use App\Bank\Wallet\Application\CreateTransaction\WalletNotExistException;
 use App\Bank\Wallet\Infrastructure\Laravel\EloquentTransaction;
 use App\Shared\Application\CommandBus;
@@ -42,6 +43,8 @@ final class CreateTransactionController extends Controller
         } catch (\InvalidArgumentException $exception) {
             return response()->json([self::ERROR => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (WalletNotExistException $exception) {
+            return response()->json([self::ERROR => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (CurrencyMismatchException $exception) {
             return response()->json([self::ERROR => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }

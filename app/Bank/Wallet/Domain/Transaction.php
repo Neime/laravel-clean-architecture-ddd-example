@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Bank\Wallet\Domain;
 
-use App\Learner\Reservation\Domain\PaymentState;
 use App\Shared\Domain\ValueObject\UuidValueObject;
 
 final class Transaction
@@ -13,13 +12,21 @@ final class Transaction
         private readonly UuidValueObject $id,
         private readonly WalletId $walletId,
         private readonly Price $price,
-        private readonly PaymentState $paymentState,
+        private readonly PaymentInstructions $paymentInstructions,
     ) {
     }
 
-    public static function create(UuidValueObject $id, WalletId $walletId, Price $price): self
+    public static function create(UuidValueObject $id, Price $price, WalletId $walletId, Balance $walletBalance): self
     {
-        return new self($id, $walletId, $price, PaymentState::NEW);
+        $paymentInstructions = PaymentInstructions::create();
+
+        if ($walletBalance->value < $price->amount()) {
+            $paymentInstructions = PaymentInstructions::fail(
+                sprintf('Insufficient funds, the balance is %s', $walletBalance->value)
+            );
+        }
+
+        return new self($id, $walletId, $price, $paymentInstructions);
     }
 
     public function id(): UuidValueObject
@@ -37,8 +44,18 @@ final class Transaction
         return $this->price;
     }
 
-    public function paymentState(): PaymentState
+    public function paymentInstructions(): PaymentInstructions
     {
-        return $this->paymentState;
+        return $this->paymentInstructions;
+    }
+
+    public function paymentState(): string
+    {
+        return $this->paymentInstructions->status()->value;
+    }
+
+    public function paymentDescription(): string
+    {
+        return $this->paymentInstructions->description();
     }
 }
