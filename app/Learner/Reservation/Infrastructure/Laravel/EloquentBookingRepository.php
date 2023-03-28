@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Learner\Reservation\Infrastructure\Laravel;
 
+use App\Bank\Wallet\Infrastructure\Laravel\EloquentTransaction;
 use App\Learner\Reservation\Application\BookLesson\BookLessonRepository;
 use App\Learner\Reservation\Application\GetBookings\BookingsResponse;
 use App\Learner\Reservation\Application\GetBookings\GetBookingsRepository;
@@ -48,7 +49,7 @@ class EloquentBookingRepository implements BookLessonRepository, GetBookingsRepo
                 new Learner(new UuidValueObject($booking['learner_id'] ?? '')),
                 new LessonId($booking['lesson_id'] ?? ''),
                 ValidationState::tryFrom($booking['status'] ?? ''),
-                PaymentState::tryFrom($booking['payment_status'] ?? ''),
+                PaymentState::tryFrom(EloquentTransaction::find($booking['transaction_id'])?->status ?? ''),
             ),
             EloquentBook::where('learner_id', $learnerId)->where('status', '!=', ValidationState::REFUSED)->get()->toArray()
         );

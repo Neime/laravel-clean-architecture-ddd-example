@@ -20,6 +20,7 @@ class EloquentLessonRepository implements GetLessonsAvailableRepository
 {
     public function getLessonsAvailable(): LessonsAvailableResponse
     {
+        // retrieve the lessons that are available if they do not have an associated booking or if the bookings are refused (and not awaiting validation, or validated)
         $lessons = DB::table('lesson')
             ->select('lesson.id', 'lesson.start_date', 'lesson.end_date', 'lesson.amount', 'lesson.currency', 'users.id as teacherId', 'users.firstname', 'users.lastname')
             ->leftJoin('book', 'book.lesson_id', '=', 'lesson.id')

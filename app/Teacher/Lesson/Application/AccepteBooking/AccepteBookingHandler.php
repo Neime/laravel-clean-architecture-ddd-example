@@ -27,7 +27,7 @@ final class AccepteBookingHandler implements CommandHandler
             throw new BookingNotExistException();
         }
 
-        if (ValidationState::PENDING !== $booking->validationState()) {
+        if (ValidationState::PENDING !== $booking->validationState() || !$booking->isPaymentValid()->value) {
             throw new BookingNotAwaitAccepteException();
         }
 

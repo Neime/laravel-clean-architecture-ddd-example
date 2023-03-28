@@ -13,7 +13,7 @@ final class Booking
         private readonly Learner $learner,
         private readonly LessonId $lessonId,
         private readonly ValidationState $validationState,
-        private readonly PaymentState $paymentState,
+        private readonly ?PaymentState $paymentState,
     ) {
     }
 

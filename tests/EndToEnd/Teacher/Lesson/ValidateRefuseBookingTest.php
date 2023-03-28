@@ -2,6 +2,7 @@
 
 namespace Tests\EndToEnd\Teacher\Lesson;
 
+use App\Bank\Wallet\Domain\PaymentStatus;
 use App\Shared\Domain\ValueObject\UuidValueObject;
 use App\Teacher\Lesson\Domain\ValidationState;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -140,6 +141,38 @@ class ValidateRefuseBookingTest extends TestCase
             ->assertJson(['error' => 'This booking does not await to refuse']);
 
         $booking = $this->newBook($this->newLearner(), ValidationState::REFUSED);
+
+        $parameters = [
+            'status' => ValidationState::REFUSED,
+        ];
+
+        $response = $this->postJson(sprintf($this->validateBookingUri, $booking->id), $parameters);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson(['error' => 'This booking does not await to refuse']);
+    }
+
+    /** @test **/
+    public function cannotValidateBookingIsPaymentIsNotValid(): void
+    {
+        $booking = $this->newBook($this->newLearner(), ValidationState::PENDING, paymentStatus: PaymentStatus::FAILED);
+
+        $parameters = [
+            'status' => ValidationState::ACCEPTED,
+        ];
+
+        $response = $this->postJson(sprintf($this->validateBookingUri, $booking->id), $parameters);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson(['error' => 'This booking does not wait to be validated']);
+    }
+
+    /** @test **/
+    public function cannotRefuseBookingIsPaymentIsNotValid(): void
+    {
+        $booking = $this->newBook($this->newLearner(), ValidationState::PENDING, paymentStatus: PaymentStatus::FAILED);
 
         $parameters = [
             'status' => ValidationState::REFUSED,

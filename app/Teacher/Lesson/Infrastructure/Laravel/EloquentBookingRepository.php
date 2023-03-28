@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Teacher\Lesson\Infrastructure\Laravel;
 
+use App\Bank\Wallet\Infrastructure\Laravel\EloquentTransaction;
 use App\Shared\Domain\ValueObject\UuidValueObject;
 use App\Shared\Infrastructure\Eloquent\EloquentBook;
 use App\Teacher\Lesson\Application\Shared\ValidationStateBookingRepository;
 use App\Teacher\Lesson\Domain\Booking;
+use App\Teacher\Lesson\Domain\IsPaymentValid;
 use App\Teacher\Lesson\Domain\ValidationState;
 
 class EloquentBookingRepository implements ValidationStateBookingRepository
@@ -20,9 +22,12 @@ class EloquentBookingRepository implements ValidationStateBookingRepository
             return null;
         }
 
+        $transactionStatus = EloquentTransaction::find($book->transaction_id)?->status ?? '';
+
         return new Booking(
             new UuidValueObject($book->id),
             ValidationState::tryFrom($book->status),
+            new IsPaymentValid('completed' === $transactionStatus)
         );
     }
 

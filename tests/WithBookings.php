@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use App\Learner\Reservation\Domain\PaymentState;
+use App\Bank\Wallet\Domain\PaymentStatus;
 use App\Learner\Reservation\Domain\ValidationState;
 use App\Shared\Infrastructure\Eloquent\EloquentBook;
 use App\Shared\Infrastructure\Eloquent\EloquentLesson;
@@ -14,14 +14,19 @@ trait WithBookings
 {
     use WithFaker;
     use WithLessons;
+    use WithWallet;
 
-    protected function newBook(EloquentUser $learner, ValidationState|TeacherValidationState $state, ?EloquentLesson $lesson = null): EloquentBook
+    protected function newBook(EloquentUser $learner, ValidationState|TeacherValidationState $state, ?EloquentLesson $lesson = null, ?PaymentStatus $paymentStatus = null): EloquentBook
     {
+        $wallet = $this->newWallet();
+        $lesson = $lesson ?? $this->newLesson();
+        $transaction = $this->newTransaction($wallet, $lesson->amount, $lesson->currency, $paymentStatus?->value ?? PaymentStatus::COMPLETED->value);
+
         $book = new EloquentBook();
         $book->learner_id = $learner->id;
-        $book->lesson_id = $lesson ? $lesson->id : $this->newLesson()->id;
+        $book->lesson_id = $lesson->id;
         $book->status = $state;
-        $book->payment_status = PaymentState::NEW;
+        $book->transaction_id = $transaction->id;
         $book->save();
 
         return $book;

@@ -13,7 +13,7 @@ trait WithWallet
     use WithFaker;
     use WithLearner;
 
-    protected function newWallet(string $currencyCode = Currency::EUR, int $balance = 10000): EloquentWallet
+    protected function newWallet(string $currencyCode = Currency::EUR, ?int $balance = 10000): EloquentWallet
     {
         $learner = $this->newLearner();
 
@@ -33,8 +33,7 @@ trait WithWallet
         string $currencyCode = null,
         string $status = null,
         string $description = null
-    ): EloquentTransaction
-    {
+    ): EloquentTransaction {
         $transaction = new EloquentTransaction();
         $transaction->wallet_id = $wallet->id;
         $transaction->amount = $amount;

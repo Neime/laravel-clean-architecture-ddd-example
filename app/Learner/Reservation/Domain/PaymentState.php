@@ -9,5 +9,5 @@ enum PaymentState: string
     case NEW = 'new';
     case PENDING = 'pending';
     case ACCEPTED = 'accepted';
-    case REFUSED = 'refused';
+    case FAILED = 'failed';
 }
