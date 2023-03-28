@@ -9,8 +9,7 @@ final class Lesson
     public function __construct(
         private readonly LessonId $id,
         private readonly Teacher $teacher,
-        private readonly int $amount,
-        private readonly string $currency,
+        private readonly PriceFormatted $priceFormatted,
         private readonly \DateTimeImmutable $startDate,
         private readonly \DateTimeImmutable $endDate,
     ) {
@@ -26,9 +25,9 @@ final class Lesson
         return $this->teacher->fullName();
     }
 
-    public function price(): string
+    public function priceFormatted(): string
     {
-        return $this->amount.' '.$this->currency;
+        return (string) $this->priceFormatted;
     }
 
     public function date(): string

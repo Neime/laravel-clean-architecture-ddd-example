@@ -53,7 +53,7 @@ class GetLessonAvailableTest extends TestCase
             ->assertJsonCount(3)
             ->assertJson(fn (AssertableJson $json) => $json->has(3)
                 ->first(fn (AssertableJson $json) => $json->where('id', $lessonAvailableOne->id)
-                    ->where('price', '3000 EUR')
+                    ->where('price', '30,00 €')
                     ->where('date', sprintf(
                         'From %s to %s',
                         $lessonAvailableOne->start_date->format('Y-m-d H:i'),

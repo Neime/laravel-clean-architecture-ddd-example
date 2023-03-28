@@ -10,6 +10,7 @@ use App\Learner\Reservation\Domain\IsAvailable;
 use App\Learner\Reservation\Domain\Lesson;
 use App\Learner\Reservation\Domain\LessonAvailable;
 use App\Learner\Reservation\Domain\LessonId;
+use App\Learner\Reservation\Domain\PriceFormatted;
 use App\Learner\Reservation\Domain\Teacher;
 use App\Learner\Reservation\Domain\ValidationState;
 use App\Shared\Domain\ValueObject\UuidValueObject;
@@ -34,8 +35,7 @@ class EloquentLessonRepository implements GetLessonsAvailableRepository
                 new Lesson(
                     new LessonId($lessonAvailable->id ?? ''),
                     new Teacher(new UuidValueObject($lessonAvailable->teacherId), $lessonAvailable->firstname, $lessonAvailable->lastname),
-                    $lessonAvailable->amount,
-                    $lessonAvailable->currency,
+                    new PriceFormatted($lessonAvailable->amount, $lessonAvailable->currency),
                     new \DateTimeImmutable($lessonAvailable->start_date),
                     new \DateTimeImmutable($lessonAvailable->end_date),
                 ),

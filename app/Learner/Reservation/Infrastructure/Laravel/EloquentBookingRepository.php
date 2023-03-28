@@ -12,6 +12,7 @@ use App\Learner\Reservation\Domain\Learner;
 use App\Learner\Reservation\Domain\Lesson;
 use App\Learner\Reservation\Domain\LessonId;
 use App\Learner\Reservation\Domain\PaymentState;
+use App\Learner\Reservation\Domain\PriceFormatted;
 use App\Learner\Reservation\Domain\Teacher;
 use App\Learner\Reservation\Domain\ValidationState;
 use App\Shared\Domain\ValueObject\UuidValueObject;
@@ -72,8 +73,7 @@ class EloquentBookingRepository implements BookLessonRepository, GetBookingsRepo
                 $teacher->firstname,
                 $teacher->lastname,
             ),
-            $lesson->amount,
-            $lesson->currency,
+            new PriceFormatted($lesson->amount, $lesson->currency),
             new \DateTimeImmutable($lesson->start_date),
             new \DateTimeImmutable($lesson->end_date),
         );

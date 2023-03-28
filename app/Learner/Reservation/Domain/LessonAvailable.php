@@ -28,7 +28,7 @@ final class LessonAvailable
             'id' => (string) $this->lesson->id(),
             'is_available' => $this->isAvailable->value,
             'teacher' => $this->lesson->teacherFullName(),
-            'price' => $this->lesson()->price(),
+            'price' => (string) $this->lesson()->priceFormatted(),
             'date' => $this->lesson()->date(),
         ];
     }
