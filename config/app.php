@@ -198,6 +198,7 @@ return [
         App\Learner\Reservation\Infrastructure\Laravel\ReservationServiceProvider::class,
         App\Teacher\User\Infrastructure\Laravel\UserServiceProvider::class,
         App\Teacher\Lesson\Infrastructure\Laravel\LessonServiceProvider::class,
+        App\Bank\Wallet\Infrastructure\Laravel\WalletServiceProvider::class,
     ],
 
     /*
