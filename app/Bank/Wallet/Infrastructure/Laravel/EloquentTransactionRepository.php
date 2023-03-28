@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Bank\Wallet\Infrastructure\Laravel;
 
-use App\Bank\Wallet\Application\CreateTransaction\CreateTransactionRepository;
+use App\Bank\Wallet\Application\Shared\TransactionRepository;
 use App\Bank\Wallet\Domain\Balance;
 use App\Bank\Wallet\Domain\Currency;
 use App\Bank\Wallet\Domain\PaymentStatus;
 use App\Bank\Wallet\Domain\Transaction;
 use App\Bank\Wallet\Domain\WalletId;
 
-class EloquentTransactionRepository implements CreateTransactionRepository
+class EloquentTransactionRepository implements TransactionRepository
 {
     public function walletExist(WalletId $walletId): bool
     {

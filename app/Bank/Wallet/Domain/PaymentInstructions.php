@@ -29,6 +29,13 @@ final class PaymentInstructions
         return new self($paymentStatus, $paymentStatus->description());
     }
 
+    public static function complete(): self
+    {
+        $paymentStatus = PaymentStatus::COMPLETED;
+
+        return new self($paymentStatus, $paymentStatus->description());
+    }
+
     public static function fail(?string $description = null): self
     {
         $paymentStatus = PaymentStatus::FAILED;

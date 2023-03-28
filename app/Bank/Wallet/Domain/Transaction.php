@@ -16,17 +16,21 @@ final class Transaction
     ) {
     }
 
-    public static function create(UuidValueObject $id, Price $price, WalletId $walletId, Balance $walletBalance): self
+    public static function create(UuidValueObject $id, Price $price, WalletId $walletId): self
     {
-        $paymentInstructions = PaymentInstructions::create();
+        return new self($id, $walletId, $price, PaymentInstructions::create());
+    }
 
-        if ($walletBalance->value < $price->amount()) {
-            $paymentInstructions = PaymentInstructions::fail(
-                sprintf('Insufficient funds, the balance is %s', $walletBalance->value)
-            );
-        }
+    public static function fail(Transaction $transaction, string $description = null): self
+    {
+        return new self($transaction->id(), $transaction->walletId(), $transaction->price(), PaymentInstructions::fail($description));
+    }
 
-        return new self($id, $walletId, $price, $paymentInstructions);
+    public static function complete(Transaction $transaction): self
+    {
+        $paymentInstructions = PaymentInstructions::complete();
+
+        return new self($transaction->id(), $transaction->walletId(), $transaction->price(), $paymentInstructions);
     }
 
     public function id(): UuidValueObject

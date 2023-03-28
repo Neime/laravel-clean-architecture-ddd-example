@@ -9,54 +9,52 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 use Tests\WithWallet;
 
-class CreateTransactionTest extends TestCase
+class DebitWalletTest extends TestCase
 {
     use WithFaker;
     use WithWallet;
 
-    private string $createTransactionUri;
+    private string $debitWalletUri;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->createTransactionUri = '/api/transaction';
+        $this->debitWalletUri = '/api/wallet/%s/debit';
     }
 
     /** @test **/
-    public function canCreateTransaction(): void
+    public function canDebitWallet(): void
     {
         $wallet = $this->newWallet();
 
         $parameters = [
-            'wallet_id' => $wallet->id,
             'amount' => 2000,
             'currency' => 'EUR',
         ];
 
-        $response = $this->postJson($this->createTransactionUri, $parameters);
+        $response = $this->postJson(sprintf($this->debitWalletUri, $wallet->id), $parameters);
 
         $response->assertStatus(Response::HTTP_CREATED);
 
         $this->assertDatabaseHas('transaction', [
             'id' => $response->json('id'),
             'wallet_id' => $wallet->id,
-            'amount' => 2000,
+            'amount' => -2000,
             'currency' => 'EUR',
-            'status' => 'new',
-            'description' => 'Transaction created',
+            'status' => 'completed',
+            'description' => 'Money received',
         ]);
     }
 
     /** @test **/
-    public function cannotCreateTransactionWithoutWalletId(): void
+    public function cannotDebitWalletWithoutWalletId(): void
     {
         $parameters = [
-            'wallet_id' => (string) UuidValueObject::random(),
             'amount' => 2000,
             'currency' => 'EUR',
         ];
 
-        $response = $this->postJson($this->createTransactionUri, $parameters);
+        $response = $this->postJson(sprintf($this->debitWalletUri, (string) UuidValueObject::random()), $parameters);
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -64,17 +62,16 @@ class CreateTransactionTest extends TestCase
     }
 
     /** @test **/
-    public function cannotCreateTransactionWithCurrencyMismatchFromWallet(): void
+    public function cannotDebitWalletWithCurrencyMismatchFromWallet(): void
     {
         $wallet = $this->newWallet(currencyCode: 'USD');
 
         $parameters = [
-            'wallet_id' => $wallet->id,
             'amount' => 2000,
             'currency' => 'EUR',
         ];
 
-        $response = $this->postJson($this->createTransactionUri, $parameters);
+        $response = $this->postJson(sprintf($this->debitWalletUri, $wallet->id), $parameters);
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -82,24 +79,23 @@ class CreateTransactionTest extends TestCase
     }
 
     /** @test **/
-    public function canCreateTransactionWithNotEnoughBalanceMustBeFailed(): void
+    public function canDebitWalletWithNotEnoughBalanceMustBeFailed(): void
     {
         $wallet = $this->newWallet(balance: 1000);
 
         $parameters = [
-            'wallet_id' => $wallet->id,
             'amount' => 2000,
             'currency' => 'EUR',
         ];
 
-        $response = $this->postJson($this->createTransactionUri, $parameters);
+        $response = $this->postJson(sprintf($this->debitWalletUri, $wallet->id), $parameters);
 
         $response->assertStatus(Response::HTTP_CREATED);
 
         $this->assertDatabaseHas('transaction', [
             'id' => $response->json('id'),
             'wallet_id' => $wallet->id,
-            'amount' => 2000,
+            'amount' => -2000,
             'currency' => 'EUR',
             'status' => 'failed',
             'description' => 'Insufficient funds, the balance is 1000',
@@ -107,7 +103,7 @@ class CreateTransactionTest extends TestCase
     }
 
     /** @test **/
-    public function canCreateTransactionFailedWithTransactionsOnBalance(): void
+    public function canDebitWalletFailedWithTransactionsOnBalance(): void
     {
         $wallet = $this->newWallet(balance: 1000);
         $this->newTransaction($wallet, 1000, status: PaymentStatus::FAILED->value);
@@ -115,19 +111,18 @@ class CreateTransactionTest extends TestCase
         $this->newTransaction($wallet, 500, status: PaymentStatus::COMPLETED->value);
 
         $parameters = [
-            'wallet_id' => $wallet->id,
             'amount' => 2000,
             'currency' => 'EUR',
         ];
 
-        $response = $this->postJson($this->createTransactionUri, $parameters);
+        $response = $this->postJson(sprintf($this->debitWalletUri, $wallet->id), $parameters);
 
         $response->assertStatus(Response::HTTP_CREATED);
 
         $this->assertDatabaseHas('transaction', [
             'id' => $response->json('id'),
             'wallet_id' => $wallet->id,
-            'amount' => 2000,
+            'amount' => -2000,
             'currency' => 'EUR',
             'status' => 'failed',
             'description' => 'Insufficient funds, the balance is 1500',

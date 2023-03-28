@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Bank\Wallet\Application\CreateTransaction;
+namespace App\Bank\Wallet\Application\Shared;
 
 final class CurrencyMismatchException extends \Exception
 {
