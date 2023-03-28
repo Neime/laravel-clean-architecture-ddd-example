@@ -6,6 +6,7 @@ use App\Learner\User\Presentation\API\CreateLearnerController;
 use App\Teacher\User\Presentation\API\CreateTeacherController;
 use App\Teacher\Lesson\Presentation\API\CreateLessonController;
 use App\Bank\Wallet\Presentation\API\CreateTransactionController;
+use App\Bank\Wallet\Presentation\API\CreateWalletController;
 use App\Learner\Reservation\Presentation\API\BookLessonController;
 use App\Teacher\Lesson\Presentation\API\ValidateBookingController;
 use App\Learner\Reservation\Presentation\API\GetBookingsController;
@@ -35,3 +36,4 @@ Route::get('bookings/{learner_id}', GetBookingsController::class);
 Route::post('booking/{id}/validation-state', ValidateBookingController::class);
 
 Route::post('transaction', CreateTransactionController::class);
+Route::post('wallet', CreateWalletController::class);

@@ -4,40 +4,31 @@ declare(strict_types=1);
 
 namespace App\Bank\Wallet\Infrastructure\Laravel;
 
-use App\Bank\Wallet\Application\CreateTransaction\CreateTransactionRepository;
-use App\Bank\Wallet\Domain\Balance;
+use App\Bank\Wallet\Application\CreateWallet\CreateWalletRepository;
 use App\Bank\Wallet\Domain\Currency;
-use App\Bank\Wallet\Domain\PaymentStatus;
-use App\Bank\Wallet\Domain\Transaction;
-use App\Bank\Wallet\Domain\WalletId;
+use App\Bank\Wallet\Domain\UserId;
+use App\Bank\Wallet\Domain\Wallet;
+use App\Shared\Infrastructure\Eloquent\EloquentUser;
 
-class EloquentWalletRepository implements CreateTransactionRepository
+class EloquentWalletRepository implements CreateWalletRepository
 {
-    public function walletExist(WalletId $walletId): bool
+    public function userExist(UserId $userId): bool
     {
-        return EloquentWallet::where('id', (string) $walletId)->exists();
+        return EloquentUser::where('id', (string) $userId)->exists();
     }
 
-    public function balance(WalletId $walletId): Balance
+    public function walletAlreadyExist(UserId $userId, Currency $currency): bool
     {
-        return new Balance((int) EloquentTransaction::where('wallet_id', (string) $walletId)->where('status', PaymentStatus::COMPLETED)->sum('amount'));
+        return EloquentWallet::where('user_id', (string) $userId)->where('currency', (string) $currency)->exists();
     }
 
-    public function currency(WalletId $walletId): Currency
+    public function store(Wallet $wallet): void
     {
-        return new Currency((string) EloquentWallet::find((string) $walletId)->currency);
-    }
+        $walletEloquent = new EloquentWallet();
+        $walletEloquent->id = (string) $wallet->id();
+        $walletEloquent->user_id = (string) $wallet->userId();
+        $walletEloquent->currency = (string) $wallet->currency();
 
-    public function store(Transaction $transaction): void
-    {
-        $transactionEloquent = new EloquentTransaction();
-        $transactionEloquent->id = (string) $transaction->id();
-        $transactionEloquent->wallet_id = (string) $transaction->walletId();
-        $transactionEloquent->amount = $transaction->price()->amount();
-        $transactionEloquent->currency = (string) $transaction->price()->currency();
-        $transactionEloquent->status = $transaction->paymentState();
-        $transactionEloquent->description = $transaction->paymentDescription();
-
-        $transactionEloquent->save();
+        $walletEloquent->save();
     }
 }
